@@ -6,6 +6,7 @@ import { PlacePage } from "../pages/place/place";
 import { SetLocationPage } from "../pages/set-location/set-location";
 import { AddPlacePage } from "../pages/add-place/add-place";
 import { AgmCoreModule } from "angular2-google-maps/core";
+import { Storage } from "@ionic/storage";
 
 import apiKeys from '../api.keys.json';
 import { PlacesService } from "../services/places.service";
@@ -32,6 +33,6 @@ import { PlacesService } from "../services/places.service";
 	  SetLocationPage,
 	  AddPlacePage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PlacesService]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PlacesService, Storage]
 })
 export class AppModule {}

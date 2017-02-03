@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { AddPlacePage } from "../add-place/add-place";
 import { PlacesService } from "../../services/places.service";
@@ -10,7 +10,7 @@ import { PlacePage } from "../place/place";
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnInit {
 	addPlacePage = AddPlacePage;
 	places: Place[] = [];
 
@@ -18,6 +18,10 @@ export class HomePage {
 		private placesService: PlacesService,
 	  private navCtrl: NavController
 	) {}
+
+	ngOnInit() {
+		this.placesService.fetchPlaces();
+	}
 
 	ionViewWillEnter() {
 		this.places = this.placesService.getPlaces();

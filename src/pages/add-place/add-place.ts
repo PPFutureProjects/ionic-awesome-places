@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Geolocation, Camera } from "ionic-native";
+import { Geolocation, Camera, File, Entry, FileError } from "ionic-native";
 import {
 	ModalController, Loading, LoadingController, AlertController, ActionSheetController,
 	NavController
@@ -11,6 +11,8 @@ import { SetLocationPage } from "../set-location/set-location";
 import { Location } from "../../models/location.model";
 import { NgForm } from "@angular/forms";
 import { PlacesService } from "../../services/places.service";
+
+declare var cordova: any;
 
 @Component({
   selector: 'page-add-place',
@@ -119,9 +121,22 @@ export class AddPlacePage {
 			correctOrientation: true
 		})
 			.then(pictureData => {
-				this.pictureUrl = pictureData;
+				const fileName = pictureData.replace(/^.*[\\\/]/, '');
+				const path = pictureData.replace(/[^\/]*$/, '');
+
+				File.moveFile(path, fileName, cordova.file.dataDirectory, fileName)
+					.then((data: Entry) => {
+						this.pictureUrl = data.nativeURL;
+						Camera.cleanup()
+					})
+					.catch((error: FileError) => {
+						this.pictureUrl = null;
+						this.displayError('Could not save the image, please try again.');
+						Camera.cleanup();
+					});
 			})
 			.catch(error => {
+				this.displayError(error.message || 'Could not take picture.');
 				console.log(error);
 			});
 	}
