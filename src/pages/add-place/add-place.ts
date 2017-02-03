@@ -10,11 +10,19 @@ import { Location } from "../../models/location.model";
 export class AddPlacePage {
 
 	location: Location = new Location(40.7624234, -73.9759827);
+	locationIsSet: boolean = false;
 
 	constructor(private modalCtrl: ModalController) {}
 
 	onOpenMap() {
-		const modal = this.modalCtrl.create(SetLocationPage, { location: this.location });
+		const modal = this.modalCtrl.create(SetLocationPage, { location: this.location, displayMarker: this.locationIsSet });
+
+		modal.onDidDismiss(data => {
+			if (data != null && data.hasOwnProperty('location')) {
+				this.location = data['location'];
+				this.locationIsSet = true;
+			}
+		});
 
 		modal.present();
 	}
