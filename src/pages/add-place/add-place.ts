@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { Geolocation } from "ionic-native";
-import { ModalController, Loading, LoadingController, AlertController } from "ionic-angular";
+import { Geolocation, Camera } from "ionic-native";
+import { ModalController, Loading, LoadingController, AlertController, ActionSheetController } from "ionic-angular";
 
 import { SetLocationPage } from "../set-location/set-location";
 
@@ -16,11 +16,13 @@ export class AddPlacePage {
 	location: Location = new Location(40.7624234, -73.9759827);
 	locationIsSet: boolean = false;
 	loading: Loading;
+	pictureUrl: string;
 
 	constructor(
 		private modalCtrl: ModalController,
 	  private loadingCtrl: LoadingController,
-	  private alertCtrl: AlertController
+	  private alertCtrl: AlertController,
+	  private actionSheetCtrl: ActionSheetController
 	) {}
 
 	onOpenMap() {
@@ -50,6 +52,35 @@ export class AddPlacePage {
 			});
 	}
 
+	onTakePicture() {
+		const actionSheet = this.actionSheetCtrl.create({
+			title: 'Take Picture',
+			buttons: [
+				{
+					text: 'Camera',
+					handler: () => {
+						this.takePicture(Camera.PictureSourceType.CAMERA);
+					}
+				},
+				{
+					text: 'Library',
+					handler: () => {
+						this.takePicture(Camera.PictureSourceType.PHOTOLIBRARY);
+					}
+				},
+				{
+					text: 'Cancel',
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancelled!');
+					}
+				}
+			]
+		});
+
+		actionSheet.present();
+	}
+
 	private displayError(message: string) {
 		const alert = this.alertCtrl.create({
 			title: 'Location Error',
@@ -66,5 +97,19 @@ export class AddPlacePage {
 		});
 
 		this.loading.present();
+	}
+
+	private takePicture(type: any) {
+		Camera.getPicture({
+			encodingType: Camera.EncodingType.JPEG,
+			sourceType: type,
+			correctOrientation: true
+		})
+			.then(pictureData => {
+				this.pictureUrl = pictureData;
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}
 }

@@ -66,13 +66,13 @@
 				<ion-col>
 					<button ion-button block outline type="button" icon-left (click)="onTakePicture()">
 						<ion-icon name="camera"></ion-icon>
-						Open Camera
+						Take Picture
 					</button>
 				</ion-col>
 			</ion-row>
-			<ion-row>
+			<ion-row *ngIf="pictureUrl">
 				<ion-col>
-					<img [src]>
+					<img [src]="pictureUrl">
 				</ion-col>
 			</ion-row>
 			<ion-row>
