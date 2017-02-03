@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 
 import { AddPlacePage } from "../add-place/add-place";
-import { NgForm } from "@angular/forms";
+import { PlacesService } from "../../services/places.service";
+import { Place } from "../../models/place.model";
+import { NavController } from "ionic-angular";
+import { PlacePage } from "../place/place";
 
 @Component({
   selector: 'page-home',
@@ -9,8 +12,18 @@ import { NgForm } from "@angular/forms";
 })
 export class HomePage {
 	addPlacePage = AddPlacePage;
+	places: Place[] = [];
 
-  onFormSubmit(form: NgForm) {
-  	console.log(form.value);
-  }
+	constructor(
+		private placesService: PlacesService,
+	  private navCtrl: NavController
+	) {}
+
+	ionViewWillEnter() {
+		this.places = this.placesService.getPlaces();
+	}
+
+	onOpenPlace(place: Place) {
+		this.navCtrl.push(PlacePage, place);
+	}
 }

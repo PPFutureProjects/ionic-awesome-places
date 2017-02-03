@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
 
 import { Geolocation, Camera } from "ionic-native";
-import { ModalController, Loading, LoadingController, AlertController, ActionSheetController } from "ionic-angular";
+import {
+	ModalController, Loading, LoadingController, AlertController, ActionSheetController,
+	NavController
+} from "ionic-angular";
 
 import { SetLocationPage } from "../set-location/set-location";
 
 import { Location } from "../../models/location.model";
+import { NgForm } from "@angular/forms";
+import { PlacesService } from "../../services/places.service";
 
 @Component({
   selector: 'page-add-place',
@@ -22,8 +27,16 @@ export class AddPlacePage {
 		private modalCtrl: ModalController,
 	  private loadingCtrl: LoadingController,
 	  private alertCtrl: AlertController,
-	  private actionSheetCtrl: ActionSheetController
+	  private actionSheetCtrl: ActionSheetController,
+	  private placesService: PlacesService,
+	  private navCtrl: NavController
 	) {}
+
+	onFormSubmit(form: NgForm) {
+		this.placesService.addPlace(form.value.title, form.value.description, this.location, this.pictureUrl);
+		form.reset();
+		this.navCtrl.pop();
+	}
 
 	onOpenMap() {
 		const modal = this.modalCtrl.create(SetLocationPage, { location: this.location, displayMarker: this.locationIsSet });
