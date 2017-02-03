@@ -9,10 +9,15 @@ import { NavParams } from "ionic-angular";
 export class SetLocationPage implements OnInit {
 
 	location: Location;
+	marker: Location;
 
 	constructor(private navParams: NavParams) {}
 
 	ngOnInit() {
 		this.location = this.navParams.get('location');
+	}
+
+	onSetMarker(event: any) {
+		this.marker = new Location(event.coords.lat, event.coords.lng);
 	}
 }
