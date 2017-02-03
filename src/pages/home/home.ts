@@ -23,7 +23,10 @@ export class HomePage {
 		this.places = this.placesService.getPlaces();
 	}
 
-	onOpenPlace(place: Place) {
-		this.navCtrl.push(PlacePage, place);
+	onOpenPlace(place: Place, index: number) {
+		this.navCtrl.push(PlacePage, {
+			place: place,
+			index: index
+		});
 	}
 }

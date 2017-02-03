@@ -13,11 +13,12 @@
 
 <ion-content padding>
 	<ion-card
-		*ngFor="let place of places"
-		(click)="onOpenPlace(place)">
+		text-center
+		*ngFor="let place of places; let i = index"
+		(click)="onOpenPlace(place, i)">
 		<img [src]="place.imagePath">
 		<ion-card-content>
-			<ion-card-title>
+			<ion-card-title text-capitalize>
 				{{ place.title }}
 			</ion-card-title>
 			<p>

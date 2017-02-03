@@ -15,4 +15,8 @@ export class PlacesService {
 	getPlaces(): Place[] {
 		return this.places.slice();
 	}
+
+	removePlace(index: number) {
+		this.places.splice(index, 1);
+	}
 }
